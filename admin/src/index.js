@@ -19,6 +19,13 @@ app.get("/investments/:id", (req, res) => {
   })
 })
 
+app.get("/export", (req, res) => {
+  request.get(`${config.investmentsServiceUrl}/investments`, (e, r, investments) => {
+    console.log(investments)
+
+  })
+})
+
 app.listen(config.port, (err) => {
   if (err) {
     console.error("Error occurred starting the server", err)
