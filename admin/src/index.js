@@ -2,6 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const config = require("config")
 const request = require("request")
+const csvStringify = require('csv-stringify')
 
 const app = express()
 
@@ -20,9 +21,11 @@ app.get("/investments/:id", (req, res) => {
 })
 
 app.get("/export", (req, res) => {
-  request.get(`${config.investmentsServiceUrl}/investments`, (e, r, investments) => {
-    console.log(investments)
+  request.get(`${config.investmentsServiceUrl}/investments`, (e, r, investmentsRaw) => {
+    const investments = JSON.parse(investmentsRaw)
+    // const investmentsCSV = csvStringify.stringify(investments)
 
+    res.write(csvStringify.stringify(investments).pipe(process.stdout))
   })
 })
 
