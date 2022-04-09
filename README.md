@@ -39,9 +39,18 @@ We're interested in how you break down the work and build your solution in a cle
     1. How might you make this service more secure?
     2. How would you make this solution scale to millions of records?
     3. What else would you have liked to improve given more time?
-  
 
 On completion email a link to your repository to your contact at Moneyhub and ensure it is publicly accessible.
+
+## Test Notes
+The new route is at http://localhost:8083/export, I've done the work on a feature branch which is in the repo.
+
+Unfortunately I've butchered this. I looked into using the stringify-csv npm package to create clean and scalable streaming solution, unfortunately I
+underestimated the time required to implement it correctly so that backfired pretty badly for me. Obviously doing this again I would implement
+the solution in a simpler more achievable way as I was attempting to backtrack to when I ran out of time and gone for better optionsif time permitted.
+This is a prioritisation error that I chalk up to being out of practice taking interviews - this is the first technical interview I've done in years.
+
+In terms of security I find it difficult to say anything as the notes indicate I should assume all security measures have been taken care of and I lack any real context to say what is appropiate beyond standard measures like encryption and Access Control.
 
 ## Getting Started
 

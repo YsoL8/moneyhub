@@ -2,7 +2,6 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const config = require("config")
 const request = require("request")
-const csvStringify = require('csv-stringify')
 
 const app = express()
 
@@ -22,10 +21,36 @@ app.get("/investments/:id", (req, res) => {
 
 app.get("/export", (req, res) => {
   request.get(`${config.investmentsServiceUrl}/investments`, (e, r, investmentsRaw) => {
-    const investments = JSON.parse(investmentsRaw)
-    // const investmentsCSV = csvStringify.stringify(investments)
+    if (e) {
+      console.error(e)
+      res.send(500)
+    } else {
+      request.get(`${config.financialCompaniesServiceUrl}/companies`, (e, r, companiesRaw) => {
+        if (e) {
+          console.error(e)
+          res.send(500)
+        } else {
+          const companies = JSON.parse(companiesRaw)
+          const investments = JSON.parse(investmentsRaw)
+          const headings = 'User|First Name|Last Name|Date|Holding|Value'
+          const csvRows = investments.map(investment => {
+            return investment.holdings.map(holding => {
+              const company = companies.filter(company => {
+                if (company.id === holding.id) {
+                  return true
+                }
+                return false
+              })
+              console.log(company)
+              return `${investment.userId},${investment.firstName},${investment.lastName},${investment.date}`
+            })
+          })
+          const response = headings + csvRows.join("\r\n")
 
-    res.write(csvStringify.stringify(investments).pipe(process.stdout))
+          res.send(response)
+        }
+      })
+    }
   })
 })
 
